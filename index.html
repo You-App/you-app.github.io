@@ -244,7 +244,7 @@
             <div class="tile-name">Google</div>
         </a>
     </div>
-    <a class="wordmark" href="einkbro://config_start_page">{{TITLE}}</a>
+    <a class="wordmark" href="browser://config_start_page">{{TITLE}}</a>
     <div class="search-wrap">
         <div class="search-bar">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
@@ -262,7 +262,7 @@
     </div>
     <div class="grid">
         {{CONTENT}}
-        <a class="tile" href="einkbro://add_start_item">
+        <a class="tile" href="browser://add_start_item">
             <div class="tile-icon">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                     <line x1="12" y1="5" x2="12" y2="19"/>
@@ -365,7 +365,7 @@
         input.addEventListener('focus', function() {
             if (!bridge()) {  // fall back to the native input bar
                 input.blur();
-                location.href = 'einkbro://focus_input';
+                location.href = 'browser://focus_input';
                 return;
             }
             document.body.classList.add('searching');
