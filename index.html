@@ -2,25 +2,14 @@
 <head>
     <title>{{TITLE}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- declaring a scheme keeps WebView's algorithmic darkening from
-         re-darkening a page that already themes itself -->
     <meta name="color-scheme" content="{{COLOR_SCHEME}}">
     <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    /* status bar inset: the window is edge-to-edge on Android 15+, so the
-       content pads itself below the bar while the background image keeps
-       covering the whole screen. The template value can be 0 when the page is
-       rendered before the view is attached (tab restore); the browser sets the
-       definitive value on page finish. */
     :root {
         --top-inset: {{TOP_INSET}}px;
     }
-    html {
-        height: 100%;
-    }
+    html { height: 100%; }
     body {
-        /* min-height (not height): when the soft keyboard halves the viewport,
-           the page must scroll rather than squeeze the layout into overlap */
         min-height: 100%;
         font-family: -apple-system, sans-serif;
         background: #fff;
@@ -30,19 +19,15 @@
         align-items: center;
         padding: var(--top-inset) 24px 0 24px;
     }
-    /* while the search box is focused, give it and the suggestions the whole
-       screen: everything else is hidden until blur */
     body.searching .top-spacer,
     body.searching .bottom-spacer,
     body.searching .wordmark,
-    body.searching .grid {
-        display: none;
-    }
-    body.searching {
-        padding-top: calc(var(--top-inset) + 16px);
-    }
+    body.searching .grid { display: none; }
+    body.searching { padding-top: calc(var(--top-inset) + 16px); }
+    
     .top-spacer { flex: 2; min-height: 24px; }
     .bottom-spacer { flex: 5; min-height: 24px; }
+    
     .wordmark {
         font-size: 34px;
         font-weight: 700;
@@ -66,16 +51,8 @@
         gap: 12px;
         padding: 14px 20px;
     }
-    .search-bar svg {
-        flex-shrink: 0;
-        color: #000;
-    }
-    .input-wrap {
-        position: relative;
-        flex: 1;
-        min-width: 0;
-        display: flex;
-    }
+    .search-bar svg { flex-shrink: 0; color: #000; }
+    .input-wrap { position: relative; flex: 1; min-width: 0; display: flex; }
     .search-bar input {
         width: 100%;
         min-width: 0;
@@ -86,122 +63,83 @@
         font-size: 16px;
         font-family: inherit;
         padding: 0;
-        caret-animation: manual;  /* static caret on engines that support it */
+        caret-animation: manual;
     }
-    .search-bar input::placeholder {
-        color: #555;
-    }
-    /* fake static caret for engines without caret-animation: the real caret is
-       hidden and a fixed bar is drawn instead — a blinking caret keeps
-       repainting, which e-ink displays cannot afford */
-    body.fakecaret .search-bar input {
-        caret-color: transparent;
-    }
+    .search-bar input::placeholder { color: #555; }
+    
+    body.fakecaret .search-bar input { caret-color: transparent; }
     #caretMirror {
-        position: absolute;
-        top: 0;
-        left: 0;
-        visibility: hidden;
-        white-space: pre;
-        font-size: 16px;
-        font-family: inherit;
+        position: absolute; top: 0; left: 0; visibility: hidden;
+        white-space: pre; font-size: 16px; font-family: inherit;
     }
     #fakeCaret {
-        display: none;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 2px;
-        height: 22px;
-        background: #000;
-        pointer-events: none;
+        display: none; position: absolute; top: 50%;
+        transform: translateY(-50%); width: 2px; height: 22px;
+        background: #000; pointer-events: none;
     }
-    body.fakecaret.caret-on #fakeCaret {
-        display: block;
-    }
-    .sugg {
-        display: none;
-        border-top: 1.5px solid #000;
-    }
-    .sugg .row {
-        padding: 10px 20px;
-    }
-    .sugg .row:active {
-        background: #e0e0e0;
-    }
-    .sugg .row + .row {
-        border-top: 1px solid #bbb;
-    }
+    body.fakecaret.caret-on #fakeCaret { display: block; }
+    
+    .sugg { display: none; border-top: 1.5px solid #000; }
+    .sugg .row { padding: 10px 20px; }
+    .sugg .row:active { background: #e0e0e0; }
+    .sugg .row + .row { border-top: 1px solid #bbb; }
     .sugg .t {
-        font-size: 14px;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 14px; font-weight: 600; white-space: nowrap;
+        overflow: hidden; text-overflow: ellipsis;
     }
     .sugg .u {
-        font-size: 11px;
-        color: #555;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-top: 2px;
+        font-size: 11px; color: #555; white-space: nowrap;
+        overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
     }
+    
     .grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px 8px;
-        width: 100%;
-        max-width: 480px;
-        margin-bottom: 20px;
+        display: flex; flex-wrap: wrap; justify-content: center;
+        gap: 20px 8px; width: 100%; max-width: 480px; margin-bottom: 20px;
     }
     .tile {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        color: #000;
-        width: 76px;
+        display: flex; flex-direction: column; align-items: center;
+        gap: 8px; text-decoration: none; color: #000; width: 76px;
     }
     .tile-icon {
-        width: 60px;
-        height: 60px;
+        position: relative; /* Добавлено для позиционирования индикатора */
+        width: 60px; height: 60px;
         border: 1.5px solid #000;
         border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: flex; align-items: center; justify-content: center;
         overflow: hidden;
     }
-    .tile:active .tile-icon {
-        background: #e0e0e0;
-    }
-    .tile-icon img {
-        width: 32px;
-        height: 32px;
-        object-fit: contain;
-    }
+    .tile:active .tile-icon { background: #e0e0e0; }
+    .tile-icon img { width: 32px; height: 32px; object-fit: contain; }
     .tile-icon .fallback {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        font-size: 26px;
-        font-weight: 700;
-        width: 100%;
-        height: 100%;
+        display: none; align-items: center; justify-content: center;
+        font-size: 26px; font-weight: 700; width: 100%; height: 100%;
     }
     .tile-name {
-        font-size: 12px;
-        font-weight: 500;
-        max-width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 12px; font-weight: 500; max-width: 100%;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    /* dark theme: applied when the app is in dark mode, or when the chosen
-       background image is dark */
+
+    /* --- Стили для индикатора доступности --- */
+    .status-indicator {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #999; /* Серый: проверка */
+        border: 1.5px solid #fff;
+        transition: background-color 0.3s ease;
+        z-index: 2;
+    }
+    .status-indicator.online {
+        background-color: #2ecc71; /* Зелёный: доступен */
+    }
+    .status-indicator.offline {
+        background-color: #e74c3c; /* Красный: недоступен */
+    }
+
+    /* Dark theme */
     body.dark { background: #000; color: #fff; }
     body.dark .wordmark { color: #fff; }
     body.dark .search-wrap { border-color: #fff; background: #000; }
@@ -215,9 +153,9 @@
     body.dark .sugg .u { color: #999; }
     body.dark .tile { color: #fff; }
     body.dark .tile-icon { background: #fff; }
-    /* the icon boxes stay white, so their content must stay dark */
     body.dark .tile-icon svg { color: #000; }
     body.dark .tile-icon .fallback { color: #000; }
+    body.dark .status-indicator { border-color: #000; }
     </style>
     {{BG_STYLE}}
 </head>
@@ -227,7 +165,8 @@
         <!-- Vitrina TV -->
         <a class="tile" href="https://vitrina.tv">
             <div class="tile-icon">
-                <img src="https://www.vitrina.tv/favicon.ico" 
+                <div class="status-indicator" title="Проверка..."></div>
+                <img src="https://vitrina.tv/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">V</div>
             </div>
@@ -237,7 +176,8 @@
         <!-- TV Explorer -->
         <a class="tile" href="https://tvexplorer.live/channel/vijuTV1000action.ru.SD/category/movies/language/ru">
             <div class="tile-icon">
-                <img src="https://www.tvexplorer.live/favicon.ico" 
+                <div class="status-indicator" title="Проверка..."></div>
+                <img src="https://tvexplorer.live/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">T</div>
             </div>
@@ -247,6 +187,7 @@
         <!-- Плеер -->
         <a class="tile" href="https://you-app.github.io/i/">
             <div class="tile-icon">
+                <div class="status-indicator" title="Проверка..."></div>
                 <img src="https://you-app.github.io/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">Y</div>
@@ -257,37 +198,30 @@
         <!-- Плейлисты -->
         <a class="tile" href="https://m3u.su/">
             <div class="tile-icon">
+                <div class="status-indicator" title="Проверка..."></div>
                 <img src="https://m3u.su/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">M</div>
             </div>
             <div class="tile-name">Плейлисты</div>
         </a>
-        
-        <!-- Яндекс -->
-        <a class="tile" href="https://yandex.ru">
-            <div class="tile-icon">
-                <img src="https://yandex.ru/favicon.ico" 
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="fallback">Я</div>
-            </div>
-            <div class="tile-name">Яндекс</div>
-        </a>
 
-        <!-- Гугл -->
-        <a class="tile" href="https://www.google.com">
+        <!-- Arena AI -->
+        <a class="tile" href="https://arena.ai">
             <div class="tile-icon">
-                <img src="https://www.google.com/favicon.ico" 
+                <div class="status-indicator" title="Проверка..."></div>
+                <img src="https://arena.ai/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">G</div>
             </div>
-            <div class="tile-name">Google</div>
+            <div class="tile-name">Giga AI</div>
         </a>
 
         <!-- Arena AI -->
         <a class="tile" href="https://arena.ai">
             <div class="tile-icon">
-                <img src="https://www.arena.ai/favicon.ico" 
+                <div class="status-indicator" title="Проверка..."></div>
+                <img src="https://arena.ai/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">A</div>
             </div>
@@ -297,7 +231,8 @@
         <!-- Qwen Chat -->
         <a class="tile" href="https://chat.qwen.ai">
             <div class="tile-icon">
-                <img src="https://www.qwen.ai/favicon.ico" 
+                <div class="status-indicator" title="Проверка..."></div>
+                <img src="https://chat.qwen.ai/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">Q</div>
             </div>
@@ -307,6 +242,7 @@
         <!-- Qwen Community -->
         <a class="tile" href="https://chat.qwen.ai/community">
             <div class="tile-icon">
+                <div class="status-indicator" title="Проверка..."></div>
                 <img src="https://chat.qwen.ai/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">C</div>
@@ -315,8 +251,9 @@
         </a>
 
         <!-- DeepSeek -->
-        <a class="tile" href="https://www.deepseek.com/">
+        <a class="tile" href="https://chat.deepseek.com/">
             <div class="tile-icon">
+                <div class="status-indicator" title="Проверка..."></div>
                 <img src="https://chat.deepseek.com/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div class="fallback">D</div>
@@ -324,22 +261,13 @@
             <div class="tile-name">DeepSeek</div>
         </a>
 
-        <!-- Qwen Community -->
-        <a class="tile" href="https://chat.qwen.ai/community">
+        <!-- DeepSeek -->
+        <a class="tile" href="https://YouTube.com/">
             <div class="tile-icon">
-                <img src="https://chat.qwen.ai/favicon.ico" 
+                <div class="status-indicator" title="Проверка..."></div>
+                <img src="https://chat.deepseek.com/favicon.ico" 
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="fallback">C</div>
-            </div>
-            <div class="tile-name">Giga</div>
-        </a>
-
-        <!-- kimi -->
-        <a class="tile" href="https://chat.deepseek.com/">
-            <div class="tile-icon">
-                <img src="https://chat.kimi.com/favicon.ico" 
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="fallback">D</div>
+                <div class="fallback">K</div>
             </div>
             <div class="tile-name">Kimi</div>
         </a>
@@ -390,15 +318,13 @@
             bridge().querySuggestions(query, token);
         }
 
-        // called by StartPageBridge with the suggestion list for request `t`
         window.__einkbroSuggestions = function(t, items) {
-            if (t !== token) return;  // a newer request is in flight
+            if (t !== token) return;
             render(items);
         };
 
         function render(items) {
             list.innerHTML = '';
-            // drop responses that arrive after the input lost focus
             if (!items || !items.length || document.activeElement !== input) {
                 list.style.display = 'none';
                 return;
@@ -416,11 +342,6 @@
                     url.textContent = item.url;
                     row.appendChild(url);
                 }
-                // pointerdown fires before the input's blur; preventing it keeps
-                // the input focused so the list stays up. Navigation waits for
-                // click, which the browser only fires for a real tap - a scroll
-                // gesture over the list ends in pointercancel and must not
-                // activate the row under the finger.
                 row.addEventListener('pointerdown', function(e) {
                     e.preventDefault();
                 });
@@ -436,8 +357,6 @@
             if (bridge() && text) bridge().submit(text);
         }
 
-        // static caret: hide the blinking native caret and draw a fixed bar at
-        // the caret position, measured with a hidden mirror of the text
         var supportsStaticCaret =
             window.CSS && CSS.supports && CSS.supports('caret-animation', 'manual');
         var mirror = document.getElementById('caretMirror');
@@ -463,7 +382,7 @@
             timer = setTimeout(function() { request(value); }, 300);
         });
         input.addEventListener('focus', function() {
-            if (!bridge()) {  // fall back to the native input bar
+            if (!bridge()) {
                 input.blur();
                 location.href = 'browser://focus_input';
                 return;
@@ -487,17 +406,6 @@
             }
         });
 
-        // the back key closes the soft keyboard without blurring the input,
-        // which would leave the page stuck in search mode; blur when the
-        // viewport returns to its full keyboard-less height AFTER the keyboard
-        // was really up. Relative growth alone is not a usable signal: while
-        // the keyboard APPEARS, Android 17 applies the ime inset to the visual
-        // viewport before the window resize lands, then corrects
-        // (897 -> 172 -> 485 on a Pixel), and a grow-ratio check misreads that
-        // bounce and kills the keyboard it is reacting to. The browser also
-        // hides its toolbar while the keyboard is up, which grows the viewport
-        // mid-show, hence the keyboardSeen gate; the timer requires full
-        // height to hold for 100ms.
         if (window.visualViewport) {
             var fullHeight = window.visualViewport.height;
             var keyboardSeen = false;
@@ -505,11 +413,11 @@
             window.visualViewport.addEventListener('resize', function() {
                 var height = window.visualViewport.height;
                 if (document.activeElement !== input) {
-                    fullHeight = height;  // keyboard-less height, tracks rotation
+                    fullHeight = height;
                     keyboardSeen = false;
                     return;
                 }
-                if (height > fullHeight) fullHeight = height;  // toolbar hidden
+                if (height > fullHeight) fullHeight = height;
                 clearTimeout(restoreTimer);
                 if (height < fullHeight * 0.7) {
                     keyboardSeen = true;
@@ -517,6 +425,56 @@
                     restoreTimer = setTimeout(function() { input.blur(); }, 100);
                 }
             });
+        }
+
+        // ==========================================
+        // ЛОГИКА ПРОВЕРКИ ДОСТУПНОСТИ САЙТОВ
+        // ==========================================
+        function checkSiteAvailability() {
+            var tiles = document.querySelectorAll('.tile');
+            tiles.forEach(function(tile, index) {
+                var url = tile.href;
+                var indicator = tile.querySelector('.status-indicator');
+                if (!indicator || !url || url.startsWith('browser://')) return;
+
+                // Небольшая задержка для каждого следующего сайта, чтобы не "положить" сеть одновременными запросами
+                setTimeout(function() {
+                    var controller = new AbortController();
+                    var timeoutId = setTimeout(function() { controller.abort(); }, 4000); // 4 секунды таймаут
+
+                    // Пробуем лёгкий HEAD-запрос в режиме no-cors (обходит ограничения CORS для проверки факта ответа сервера)
+                    fetch(url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal, cache: 'no-store' })
+                        .then(function() {
+                            indicator.classList.add('online');
+                            indicator.title = 'Сайт доступен';
+                        })
+                        .catch(function() {
+                            // Если HEAD заблокирован, пробуем обычный GET
+                            var controller2 = new AbortController();
+                            var timeoutId2 = setTimeout(function() { controller2.abort(); }, 4000);
+                            fetch(url, { method: 'GET', mode: 'no-cors', signal: controller2.signal, cache: 'no-store' })
+                                .then(function() {
+                                    indicator.classList.add('online');
+                                    indicator.title = 'Сайт доступен';
+                                })
+                                .catch(function() {
+                                    indicator.classList.add('offline');
+                                    indicator.title = 'Сайт недоступен или превышено время ожидания';
+                                })
+                                .finally(function() { clearTimeout(timeoutId2); });
+                        })
+                        .finally(function() {
+                            clearTimeout(timeoutId);
+                        });
+                }, index * 150); // 150 мс между запросами
+            });
+        }
+
+        // Запускаем проверку после загрузки DOM
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', checkSiteAvailability);
+        } else {
+            checkSiteAvailability();
         }
     })();
     </script>
