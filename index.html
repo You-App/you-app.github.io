@@ -7,155 +7,236 @@
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     :root {
         --top-inset: {{TOP_INSET}}px;
+        /* iOS system colors — light */
+        --bg: #f2f2f7;
+        --bg-elevated: #ffffff;
+        --label: #000000;
+        --secondary-label: #3c3c4399;
+        --tertiary-label: #3c3c434d;
+        --separator: #3c3c4349;
+        --system-blue: #007aff;
+        --system-green: #34c759;
+        --system-red: #ff3b30;
+        --system-gray5: #e5e5ea;
+        --system-gray6: #f2f2f7;
+        --tile-bg: #ffffff;
+        --search-bg: rgba(118, 118, 128, 0.12);
+        --shadow-tile: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+        --shadow-tile-active: 0 0.5px 1.5px rgba(0,0,0,0.1);
     }
     html { height: 100%; }
     body {
         min-height: 100%;
-        font-family: -apple-system, sans-serif;
-        background: #fff;
-        color: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: var(--bg);
+        color: var(--label);
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: var(--top-inset) 24px 0 24px;
+        padding: var(--top-inset) 20px 0 20px;
+        letter-spacing: -0.01em;
     }
+
     body.searching .top-spacer,
     body.searching .bottom-spacer,
     body.searching .wordmark,
     body.searching .grid { display: none; }
-    body.searching { padding-top: calc(var(--top-inset) + 16px); }
-    
-    .top-spacer { flex: 2; min-height: 24px; }
-    .bottom-spacer { flex: 5; min-height: 24px; }
-    
+    body.searching { padding-top: calc(var(--top-inset) + 12px); }
+
+    .top-spacer { flex: 2; min-height: 20px; }
+    .bottom-spacer { flex: 5; min-height: 20px; }
+
     .wordmark {
-        font-size: 34px;
+        font-size: 28px;
         font-weight: 700;
-        letter-spacing: 1px;
-        margin-bottom: 28px;
-        color: #000;
+        letter-spacing: -0.02em;
+        margin-bottom: 24px;
+        color: var(--label);
         text-decoration: none;
     }
+
+    /* Поисковая строка в стиле iOS — pill-shape с полупрозрачным фоном */
     .search-wrap {
         width: 100%;
-        max-width: 480px;
-        border: 2px solid #000;
-        border-radius: 28px;
-        margin-bottom: 36px;
-        background: #fff;
+        max-width: 500px;
+        border-radius: 12px;
+        margin-bottom: 28px;
+        background: var(--search-bg);
         overflow: hidden;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
     }
     .search-bar {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px 20px;
+        gap: 8px;
+        padding: 9px 12px;
     }
-    .search-bar svg { flex-shrink: 0; color: #000; }
-    .input-wrap { position: relative; flex: 1; min-width: 0; display: flex; }
+    .search-bar svg {
+        flex-shrink: 0;
+        color: var(--secondary-label);
+    }
+    .input-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+    }
     .search-bar input {
         width: 100%;
         min-width: 0;
         border: none;
         outline: none;
         background: transparent;
-        color: #000;
-        font-size: 16px;
+        color: var(--label);
+        font-size: 17px;
+        font-weight: 400;
         font-family: inherit;
         padding: 0;
         caret-animation: manual;
     }
-    .search-bar input::placeholder { color: #555; }
-    
+    .search-bar input::placeholder {
+        color: var(--secondary-label);
+    }
+
     body.fakecaret .search-bar input { caret-color: transparent; }
     #caretMirror {
         position: absolute; top: 0; left: 0; visibility: hidden;
-        white-space: pre; font-size: 16px; font-family: inherit;
+        white-space: pre; font-size: 17px; font-family: inherit;
     }
     #fakeCaret {
         display: none; position: absolute; top: 50%;
-        transform: translateY(-50%); width: 2px; height: 22px;
-        background: #000; pointer-events: none;
+        transform: translateY(-50%); width: 2px; height: 20px;
+        background: var(--system-blue); border-radius: 1px;
+        pointer-events: none;
     }
     body.fakecaret.caret-on #fakeCaret { display: block; }
-    
-    .sugg { display: none; border-top: 1.5px solid #000; }
-    .sugg .row { padding: 10px 20px; }
-    .sugg .row:active { background: #e0e0e0; }
-    .sugg .row + .row { border-top: 1px solid #bbb; }
+
+    .sugg { display: none; border-top: 0.5px solid var(--separator); background: var(--bg-elevated); }
+    .sugg .row { padding: 11px 14px; }
+    .sugg .row:active { background: var(--system-gray5); }
+    .sugg .row + .row { border-top: 0.5px solid var(--separator); }
     .sugg .t {
-        font-size: 14px; font-weight: 600; white-space: nowrap;
-        overflow: hidden; text-overflow: ellipsis;
+        font-size: 16px; font-weight: 400; white-space: nowrap;
+        overflow: hidden; text-overflow: ellipsis; color: var(--label);
     }
     .sugg .u {
-        font-size: 11px; color: #555; white-space: nowrap;
+        font-size: 13px; color: var(--secondary-label); white-space: nowrap;
         overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
     }
-    
+
+    /* Сетка плиток в стиле домашнего экрана iOS */
     .grid {
-        display: flex; flex-wrap: wrap; justify-content: center;
-        gap: 20px 8px; width: 100%; max-width: 480px; margin-bottom: 20px;
-    }
-    .tile {
-        display: flex; flex-direction: column; align-items: center;
-        gap: 8px; text-decoration: none; color: #000; width: 76px;
-    }
-    .tile-icon {
-        position: relative; /* Добавлено для позиционирования индикатора */
-        width: 60px; height: 60px;
-        border: 1.5px solid #000;
-        border-radius: 14px;
-        display: flex; align-items: center; justify-content: center;
-        overflow: hidden;
-    }
-    .tile:active .tile-icon { background: #e0e0e0; }
-    .tile-icon img { width: 32px; height: 32px; object-fit: contain; }
-    .tile-icon .fallback {
-        display: none; align-items: center; justify-content: center;
-        font-size: 26px; font-weight: 700; width: 100%; height: 100%;
-    }
-    .tile-name {
-        font-size: 12px; font-weight: 500; max-width: 100%;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px 12px;
+        width: 100%;
+        max-width: 420px;
+        margin-bottom: 20px;
+        padding: 0 4px;
     }
 
-    /* --- Стили для индикатора доступности --- */
+    .tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        color: var(--label);
+        width: 100%;
+        -webkit-transition: transform 0.15s ease;
+        transition: transform 0.15s ease;
+    }
+    .tile:active { transform: scale(0.94); }
+
+    /* Иконка-плитка как приложение iOS: крупная, скруглённая, с тенью */
+    .tile-icon {
+        position: relative;
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+        background: var(--tile-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: var(--shadow-tile);
+        -webkit-transition: box-shadow 0.15s ease;
+        transition: box-shadow 0.15s ease;
+    }
+    .tile:active .tile-icon {
+        box-shadow: var(--shadow-tile-active);
+    }
+    .tile-icon img {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+    }
+    .tile-icon .fallback {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: 600;
+        width: 100%;
+        height: 100%;
+        color: var(--system-blue);
+        background: linear-gradient(180deg, #ffffff 0%, #f0f0f5 100%);
+    }
+
+    .tile-name {
+        font-size: 12px;
+        font-weight: 400;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--label);
+        text-align: center;
+    }
+
+    /* Индикатор доступности — минималистичная точка в стиле iOS */
     .status-indicator {
         position: absolute;
-        top: 4px;
-        right: 4px;
-        width: 10px;
-        height: 10px;
+        top: 3px;
+        right: 3px;
+        width: 9px;
+        height: 9px;
         border-radius: 50%;
-        background-color: #999; /* Серый: проверка */
-        border: 1.5px solid #fff;
-        transition: background-color 0.3s ease;
+        background-color: #8e8e93; /* systemGray */
+        box-shadow: 0 0 0 1.5px rgba(255,255,255,0.9);
+        transition: background-color 0.25s ease;
         z-index: 2;
     }
-    .status-indicator.online {
-        background-color: #2ecc71; /* Зелёный: доступен */
-    }
-    .status-indicator.offline {
-        background-color: #e74c3c; /* Красный: недоступен */
-    }
+    .status-indicator.online { background-color: var(--system-green); }
+    .status-indicator.offline { background-color: var(--system-red); }
 
-    /* Dark theme */
-    body.dark { background: #000; color: #fff; }
-    body.dark .wordmark { color: #fff; }
-    body.dark .search-wrap { border-color: #fff; background: #000; }
-    body.dark .search-bar svg { color: #fff; }
-    body.dark .search-bar input { color: #fff; }
-    body.dark .search-bar input::placeholder { color: #999; }
-    body.dark #fakeCaret { background: #fff; }
-    body.dark .sugg { border-top-color: #fff; }
-    body.dark .sugg .row:active { background: #333; }
-    body.dark .sugg .row + .row { border-top-color: #666; }
-    body.dark .sugg .u { color: #999; }
-    body.dark .tile { color: #fff; }
-    body.dark .tile-icon { background: #fff; }
-    body.dark .tile-icon svg { color: #000; }
-    body.dark .tile-icon .fallback { color: #000; }
-    body.dark .status-indicator { border-color: #000; }
+    /* ============ ТЁМНАЯ ТЕМА в стиле iOS Dark Mode ============ */
+    body.dark {
+        --bg: #000000;
+        --bg-elevated: #1c1c1e;
+        --label: #ffffff;
+        --secondary-label: #ebebf599;
+        --tertiary-label: #ebebf54d;
+        --separator: #54545899;
+        --system-gray5: #2c2c2e;
+        --tile-bg: #1c1c1e;
+        --search-bg: rgba(118, 118, 128, 0.24);
+        --shadow-tile: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+        --shadow-tile-active: 0 0.5px 1.5px rgba(0,0,0,0.5);
+        background: var(--bg);
+        color: var(--label);
+    }
+    body.dark .wordmark { color: var(--label); }
+    body.dark .tile-icon .fallback {
+        color: #0a84ff; /* iOS systemBlue dark */
+        background: linear-gradient(180deg, #2c2c2e 0%, #1c1c1e 100%);
+    }
+    body.dark .status-indicator {
+        box-shadow: 0 0 0 1.5px rgba(28,28,30,0.9);
+    }
     </style>
     {{BG_STYLE}}
 </head>
